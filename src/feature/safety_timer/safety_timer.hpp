@@ -37,7 +37,7 @@ public:
 #if !HAS_HUMAN_INTERACTIONS()
     static constexpr Time default_interval = 10 * 60 * 1000;
 #else
-    static constexpr Time default_interval = 30 * 60 * 1000;
+    static constexpr Time default_interval = 360 * 60 * 1000;
 #endif
 
 public:
