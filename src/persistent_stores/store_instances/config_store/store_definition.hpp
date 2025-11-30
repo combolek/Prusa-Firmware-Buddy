@@ -963,7 +963,7 @@ struct CurrentStore
     StoreItem<bool, true, ItemFlag::features, journal::hash("Chamber filtration post print enable")> chamber_post_print_filtration_enable;
     StoreItem<bool, true, ItemFlag::features, journal::hash("Chamber filtration print enable")> chamber_print_filtration_enable;
     StoreItem<uint8_t, 10, ItemFlag::features, journal::hash("Chamber filtration post print duration")> chamber_post_print_filtration_duration_min;
-    StoreItem<PWM255, PWM255::from_percent(40).value, ItemFlag::features, journal::hash("Chamber mid print filtration pwm")> chamber_mid_print_filtration_pwm;
+    StoreItem<PWM255, PWM255::from_percent(30).value, ItemFlag::features, journal::hash("Chamber mid print filtration pwm")> chamber_mid_print_filtration_pwm;
     StoreItem<PWM255, PWM255::from_percent(40).value, ItemFlag::features, journal::hash("Chamber post print filtration pwm")> chamber_post_print_filtration_pwm;
     StoreItem<bool, false, ItemFlag::features, journal::hash("Chamber filtration always on")> chamber_filtration_always_on;
 
