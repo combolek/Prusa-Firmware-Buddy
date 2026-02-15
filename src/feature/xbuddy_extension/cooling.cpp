@@ -2,6 +2,9 @@
 
 #include <algorithm>
 #include <feature/chamber_filtration/chamber_filtration.hpp>
+#if 0
+    #include <puppies/xbuddy_extension.hpp>
+#endif
 #include <bsod/bsod.h>
 
 namespace buddy {
@@ -77,6 +80,30 @@ FanCooling::FanPWM FanCooling::compute_auto_regulation_step_legacy(Temperature c
     float regulation_output = last_regulation_output + (integration_constant * error);
 
     regulation_output = std::clamp<float>(regulation_output, 0.0f, static_cast<float>(max_auto_pwm.value));
+
+#if 0
+    // Debug output
+    {
+      const auto thtemp = chamber().thermistor_temperature();
+      const auto pwm = puppies::xbuddy_extension.get_requested_fan_pwm(2);
+      const auto rpm = puppies::xbuddy_extension.get_fan_rpm(2);
+      char buf[128];
+      snprintf(buf, sizeof(buf), "tt: %2.1f  th: %2.1f  ct: %2.1f  er: % 2.1f  lro: %3.1f  ro: %3.1f  pwm: %3u/%3u%%  rpm: %4u\n",
+               (double)target_temperature,
+               (double)thtemp.value_or(0.0f),
+               (double)current_temperature,
+               (double)error,
+               (double)last_regulation_output,
+               (double)regulation_output,
+               pwm,
+               pwm*100/255,
+               rpm.value_or(0)
+               );
+      //SERIAL_ECHO(current_temperature);
+      //SERIAL_EOL();
+      MYSERIAL0.write((const uint8_t *)buf, strlen(buf));
+    }
+#endif
 
     // convert float result to integer, while keeping the range of float for next loop
     desired = static_cast<FanPWM::Value>(regulation_output);
