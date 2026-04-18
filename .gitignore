@@ -22,5 +22,6 @@
 /src/**/*.mo
 CMakeUserPresets.json
 Makefile
+TAGS
 __pycache__
 compile_commands.json
