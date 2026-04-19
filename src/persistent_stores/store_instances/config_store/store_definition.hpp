@@ -891,7 +891,7 @@ struct CurrentStore
     // Has flag of hw_config because the user toggles this as part of hw_config in printer setup
     StoreItem<bool, true, ItemFlag::hw_config, journal::hash("XBE USB Host power")> xbe_usb_power;
     StoreItem<uint8_t, 102, ItemFlag::features, journal::hash("XBuddy Extension Chamber Fan Max Control Limit")> xbe_cooling_fan_max_auto_pwm;
-    StoreItem<uint8_t, PWM255::from_percent(80).value, ItemFlag::features, journal::hash("XBE Filtration Fan Max Auto PWM")> xbe_filtration_fan_max_auto_pwm;
+    StoreItem<uint8_t, PWM255::from_percent(70).value, ItemFlag::features, journal::hash("XBE Filtration Fan Max Auto PWM")> xbe_filtration_fan_max_auto_pwm;
 #endif
 
 #if HAS_DOOR_SENSOR_CALIBRATION()
