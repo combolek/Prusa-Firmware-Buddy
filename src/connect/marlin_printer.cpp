@@ -359,16 +359,23 @@ Printer::Params MarlinPrinter::params() const {
 #endif
 #if PRINTER_IS_PRUSA_COREONE() || PRINTER_IS_PRUSA_COREONEL()
     {
-        auto xbe = buddy::xbuddy_extension().get_fan12_state(); // avoid locking 2 mutexes just to read a single value (and we are reading 4 values)
+        auto &xbe_instance = buddy::xbuddy_extension();
+        auto xbe = xbe_instance.get_fan_state(); // read all the fan values under a single lock
+        const auto pwm_to_percent = [](buddy::XBuddyExtension::FanPWMOrAuto pwm) -> int8_t {
+            return pwm.transform(buddy::XBuddyExtension::FanPWM::to_percent_static).value_or(connect_client::Printer::ChamberInfo::fan_pwm_target_unset);
+        };
         params.chamber_info = {
             .target_temp = (uint32_t)buddy::chamber().target_temperature().value_or(connect_client::Printer::ChamberInfo::target_temp_unset),
             .current_temp = buddy::chamber().current_temperature().value_or(0), /* Missing that would be rare, so we just always render something for simplicity */
             .fan_1_rpm = xbe.fan1rpm,
             .fan_2_rpm = xbe.fan2rpm,
-            .fan_pwm_target = xbe.fan1_fan2_target_pwm.transform(buddy::XBuddyExtension::FanPWM::to_percent_static).value_or(connect_client::Printer::ChamberInfo::fan_pwm_target_unset),
+            .fan_pwm_target = pwm_to_percent(xbe.fan1_fan2_target_pwm),
+            .has_filtration_fan = xbe_instance.using_filtration_fan_instead_of_cooling_fans(),
+            .filtration_fan_rpm = xbe.filtration_fan_rpm,
+            .filtration_fan_pwm_target = pwm_to_percent(xbe.filtration_fan_target_pwm),
             .led_intensity = static_cast<int8_t>(static_cast<uint16_t>(leds::SideStripHandler::instance().get_max_brightness()) * 100 / 255),
         };
-        params.addon_power = buddy::xbuddy_extension().usb_power();
+        params.addon_power = xbe_instance.usb_power();
     }
 #endif
     params.print_duration = marlin_vars().print_duration;

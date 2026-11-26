@@ -488,6 +488,7 @@ TEST_CASE("connect::Test ID limited to 31bits only", "[connect]") {
 
 namespace buddy {
 extern PWM255OrAuto cooling_fans_pwm;
+extern PWM255OrAuto filtration_fan_pwm;
 } // namespace buddy
 
 TEST_CASE("connect::Command Set value - xbuddy_extension fan1, 2 set/unset logic", "[connect]") {
@@ -509,6 +510,31 @@ TEST_CASE("connect::Command Set value - xbuddy_extension fan1, 2 set/unset logic
         test.planner.command(command);
         REQUIRE(buddy::cooling_fans_pwm == PWM255 { 255 });
     }
+}
+
+TEST_CASE("connect::Command Set value - xbuddy_extension filtration fan set/unset logic", "[connect]") {
+    buddy::cooling_fans_pwm = pwm_auto;
+    SECTION("unset") {
+        Test test;
+        buddy::filtration_fan_pwm = PWM255 { 10 };
+        auto command = Command { CommandId(0), SetValue { PropertyName::ChamberFiltrationFanPwmTarget, 0, int8_t(-1) } };
+        test.planner.command(command);
+        REQUIRE(buddy::filtration_fan_pwm == pwm_auto);
+    }
+    SECTION("0%") {
+        Test test;
+        auto command = Command { CommandId(0), SetValue { PropertyName::ChamberFiltrationFanPwmTarget, 0, int8_t(0) } };
+        test.planner.command(command);
+        REQUIRE(buddy::filtration_fan_pwm == PWM255 { 0 });
+    }
+    SECTION("100%") {
+        Test test;
+        auto command = Command { CommandId(0), SetValue { PropertyName::ChamberFiltrationFanPwmTarget, 0, int8_t(100) } };
+        test.planner.command(command);
+        REQUIRE(buddy::filtration_fan_pwm == PWM255 { 255 });
+    }
+    // The cooling fans are controlled separately
+    REQUIRE(buddy::cooling_fans_pwm == pwm_auto);
 }
 
 namespace buddy {

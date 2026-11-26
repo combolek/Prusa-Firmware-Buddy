@@ -82,9 +82,11 @@ public: // Fans
     struct FanState {
         uint16_t fan1rpm, fan2rpm;
         FanPWMOrAuto fan1_fan2_target_pwm;
+        uint16_t filtration_fan_rpm;
+        FanPWMOrAuto filtration_fan_target_pwm;
     };
 
-    FanState get_fan12_state() const;
+    FanState get_fan_state() const;
 
     /// \returns whether the fan 3 is connected/used and thus whether we should consider it in sensor info, selftest results and such
     bool using_filtration_fan_instead_of_cooling_fans() const;

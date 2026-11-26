@@ -245,13 +245,15 @@ void XBuddyExtension::set_fan_target_pwm(Fan fan, FanPWMOrAuto target) {
     bsod_unreachable();
 }
 
-XBuddyExtension::FanState XBuddyExtension::get_fan12_state() const {
+XBuddyExtension::FanState XBuddyExtension::get_fan_state() const {
     std::lock_guard _lg(mutex_);
     auto fanrpms = puppies::xbuddy_extension.get_fans_rpm();
     return FanState {
-        .fan1rpm = fanrpms[0],
-        .fan2rpm = fanrpms[1],
+        .fan1rpm = fanrpms[std::to_underlying(Fan::cooling_fan_1)],
+        .fan2rpm = fanrpms[std::to_underlying(Fan::cooling_fan_2)],
         .fan1_fan2_target_pwm = cooling_fans_target_pwm_,
+        .filtration_fan_rpm = fanrpms[std::to_underlying(Fan::filtration_fan)],
+        .filtration_fan_target_pwm = filtration_fan_target_pwm_,
     };
 }
 

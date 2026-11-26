@@ -306,6 +306,29 @@ TEST_CASE("connect::Set value - chamber.fan_pwm_target", "[connect]") {
     }
 }
 
+void set_value_chamber_filtration_fan_pwm_target(int8_t pwm) {
+    std::string json = std::format(R"({{"command":"SET_VALUE","kwargs":{{"chamber.filtration_fan_pwm_target": {}}}}})", pwm);
+
+    auto cmd = command_test<SetValue>(json.c_str());
+    REQUIRE(cmd.name == PropertyName::ChamberFiltrationFanPwmTarget);
+    REQUIRE(holds_alternative<int8_t>(cmd.value));
+    REQUIRE(get<int8_t>(cmd.value) == pwm);
+}
+
+TEST_CASE("connect::Set value - chamber.filtration_fan_pwm_target", "[connect]") {
+    SECTION("auto") {
+        set_value_chamber_filtration_fan_pwm_target(-1);
+    }
+
+    SECTION("0") {
+        set_value_chamber_filtration_fan_pwm_target(0);
+    }
+
+    SECTION("100") {
+        set_value_chamber_filtration_fan_pwm_target(100);
+    }
+}
+
 void set_value_chamber_led_intensity(int8_t pwm) {
     std::string json = std::format(R"({{"command":"SET_VALUE","kwargs":{{"chamber.led_intensity": {}}}}})", pwm);
 

@@ -133,6 +133,28 @@ TEST_CASE("connect::Render", "[connect]") {
         // clang-format on
     }
 
+    SECTION("Telemetry - idle with filtration fan") {
+        params.emplace(params_idle());
+        params->chamber_info.has_filtration_fan = true;
+        params->chamber_info.filtration_fan_rpm = 3400;
+        params->chamber_info.filtration_fan_pwm_target = 50;
+        action = SendTelemetry { SendTelemetry::Mode::Full };
+        // clang-format off
+        expected = "{"
+            "\"temp_bed\":0.0,"
+            "\"target_bed\":0.0,"
+            "\"speed\":0,"
+            "\"flow\":0,"
+            "\"chamber\":{\"temp\":0.0,\"target_temp\":0,\"fan_1_rpm\":0,\"fan_2_rpm\":0,\"fan_pwm_target\":-1,\"filtration_fan_rpm\":3400,\"filtration_fan_pwm_target\":50,\"led_intensity\":0},"
+            "\"axis_x\":0.00,"
+            "\"axis_y\":0.00,"
+            "\"axis_z\":0.00,"
+            "\"tools\":{\"0\":{\"type\":\"FFF_PRINT_HEAD\",\"active\":true,\"nozzle_temp\":0.0,\"nozzle_target_temp\":null,\"heatbreak_fan_rpm\":0,\"print_fan_rpm\":0,\"consumed_weight\":null,\"odometer_id\":0,\"odometer_e\":0}},"
+            "\"state\":\"IDLE\""
+        "}";
+        // clang-format on
+    }
+
     SECTION("Telemetry - disabled head") {
         auto idle = params_idle();
         // No tool enabled, like the error printer reports

@@ -5,6 +5,7 @@
 namespace buddy {
 
 PWM255OrAuto cooling_fans_pwm = pwm_auto;
+PWM255OrAuto filtration_fan_pwm = pwm_auto;
 
 XBuddyExtension::XBuddyExtension() {
 }
@@ -15,8 +16,14 @@ XBuddyExtension &xbuddy_extension() {
 }
 
 void XBuddyExtension::set_fan_target_pwm(Fan fan, FanPWMOrAuto pwm) {
-    if (fan == Fan::cooling_fan_1) {
+    switch (fan) {
+    case Fan::cooling_fan_1:
+    case Fan::cooling_fan_2:
         cooling_fans_pwm = pwm;
+        break;
+    case Fan::filtration_fan:
+        filtration_fan_pwm = pwm;
+        break;
     }
 }
 

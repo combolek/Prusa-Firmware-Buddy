@@ -28,6 +28,18 @@ TEST_CASE("connect::Params CRC", "[connect]") {
         params.chamber_info.fan_pwm_target = 50;
     }
 
+    SECTION("chamber filtration fan presence") {
+        params.chamber_info.has_filtration_fan = true;
+    }
+
+    SECTION("chamber filtration_fan_rpm") {
+        params.chamber_info.filtration_fan_rpm = 3400;
+    }
+
+    SECTION("chamber filtration_fan_pwm_target") {
+        params.chamber_info.filtration_fan_pwm_target = 50;
+    }
+
     SECTION("chamber led_intensity") {
         params.chamber_info.led_intensity = 100;
     }

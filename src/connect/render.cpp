@@ -206,6 +206,10 @@ namespace {
                     JSON_FIELD_INT("fan_1_rpm", params.chamber_info.fan_1_rpm) JSON_COMMA;
                     JSON_FIELD_INT("fan_2_rpm", params.chamber_info.fan_2_rpm) JSON_COMMA;
                     JSON_FIELD_INT("fan_pwm_target", params.chamber_info.fan_pwm_target) JSON_COMMA;
+                    if (params.chamber_info.has_filtration_fan) {
+                        JSON_FIELD_INT("filtration_fan_rpm", params.chamber_info.filtration_fan_rpm) JSON_COMMA;
+                        JSON_FIELD_INT("filtration_fan_pwm_target", params.chamber_info.filtration_fan_pwm_target) JSON_COMMA;
+                    }
                     JSON_FIELD_INT("led_intensity", params.chamber_info.led_intensity);
                 JSON_OBJ_END JSON_COMMA;
 #endif

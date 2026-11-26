@@ -176,6 +176,9 @@ uint32_t Printer::Params::telemetry_fingerprint(bool include_xy_axes) const {
         .add(int(chamber_info.fan_2_rpm / 500))
         .add(chamber_info.target_temp)
         .add(chamber_info.fan_pwm_target)
+        .add(chamber_info.has_filtration_fan)
+        .add(int(chamber_info.filtration_fan_rpm / 500))
+        .add(chamber_info.filtration_fan_pwm_target)
         .add(chamber_info.led_intensity)
 #endif
         .done();

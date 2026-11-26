@@ -118,6 +118,11 @@ public:
         uint16_t fan_2_rpm = 0;
         static constexpr int8_t fan_pwm_target_unset = -1; // -1 means auto control, 0-100 is pwm percentage for manual control
         int8_t fan_pwm_target = fan_pwm_target_unset;
+        /// Whether the official filtration fan is used; filtration_fan_* are meaningful only then.
+        bool has_filtration_fan = false;
+        uint16_t filtration_fan_rpm = 0;
+        /// Same encoding as fan_pwm_target
+        int8_t filtration_fan_pwm_target = fan_pwm_target_unset;
         int8_t led_intensity = 0;
     };
 #endif

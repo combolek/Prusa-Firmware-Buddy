@@ -259,6 +259,18 @@ namespace {
         }
         return nullptr;
     }
+
+#if XBUDDY_EXTENSION_VARIANT_IS_STANDARD()
+    /// Negative percent means automatic control
+    void set_xbe_fan_target(buddy::XBuddyExtension::Fan fan, int8_t percent) {
+        using XBE = buddy::XBuddyExtension;
+        XBE::FanPWMOrAuto target = pwm_auto;
+        if (percent >= 0) {
+            target = XBE::FanPWM::from_percent(percent);
+        }
+        buddy::xbuddy_extension().set_fan_target_pwm(fan, target);
+    }
+#endif
 } // namespace
 
 const char *to_str(EventType event) {
@@ -1040,12 +1052,13 @@ void Planner::command(const Command &command, const SetValue &params) {
         const auto gcode_temp = (target_temp == connect_client::Printer::ChamberInfo::target_temp_unset) ? uint32_t { 0 } : target_temp;
         marlin_client::inject(GCodeLiteral("M141 S%g", gcode_temp));
     } break;
-    case connect_client::PropertyName::ChamberFanPwmTarget: {
+    case connect_client::PropertyName::ChamberFanPwmTarget:
         // Note: cooling fans share PWM control
-        const int8_t percent = get<int8_t>(params.value);
-        buddy::xbuddy_extension().set_fan_target_pwm(buddy::XBuddyExtension::Fan::cooling_fan_1, percent < 0 ? buddy::XBuddyExtension::FanPWMOrAuto(pwm_auto) : buddy::XBuddyExtension::FanPWM::from_percent(percent));
-
-    } break;
+        set_xbe_fan_target(buddy::XBuddyExtension::Fan::cooling_fan_1, get<int8_t>(params.value));
+        break;
+    case connect_client::PropertyName::ChamberFiltrationFanPwmTarget:
+        set_xbe_fan_target(buddy::XBuddyExtension::Fan::filtration_fan, get<int8_t>(params.value));
+        break;
     case connect_client::PropertyName::AddonPower:
         buddy::xbuddy_extension().set_usb_power(get<bool>(params.value));
         break;

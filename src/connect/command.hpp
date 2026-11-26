@@ -114,6 +114,7 @@ enum class PropertyName {
     // Therefore option HAS_CHAMBER_API is NOT used yet.
     ChamberTargetTemp,
     ChamberFanPwmTarget,
+    ChamberFiltrationFanPwmTarget,
     AddonPower, // not a very descriptive name, but the Connect team understands this property name as USB power output on the XBE
 #endif
 #if HAS_SIDE_LEDS() || defined(UNITTESTS)
