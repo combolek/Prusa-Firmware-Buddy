@@ -206,9 +206,11 @@ namespace {
                     JSON_FIELD_INT("fan_1_rpm", params.chamber_info.fan_1_rpm) JSON_COMMA;
                     JSON_FIELD_INT("fan_2_rpm", params.chamber_info.fan_2_rpm) JSON_COMMA;
                     JSON_FIELD_INT("fan_pwm_target", params.chamber_info.fan_pwm_target) JSON_COMMA;
+                    JSON_FIELD_INT("fan_pwm", params.chamber_info.fan_pwm) JSON_COMMA;
                     if (params.chamber_info.has_filtration_fan) {
                         JSON_FIELD_INT("filtration_fan_rpm", params.chamber_info.filtration_fan_rpm) JSON_COMMA;
                         JSON_FIELD_INT("filtration_fan_pwm_target", params.chamber_info.filtration_fan_pwm_target) JSON_COMMA;
+                        JSON_FIELD_INT("filtration_fan_pwm", params.chamber_info.filtration_fan_pwm) JSON_COMMA;
                     }
                     JSON_FIELD_INT("led_intensity", params.chamber_info.led_intensity);
                 JSON_OBJ_END JSON_COMMA;
@@ -240,7 +242,9 @@ namespace {
                                     JSON_FIELD_NULL("nozzle_target_temp") JSON_COMMA;
                                 }
                                 JSON_FIELD_INT("heatbreak_fan_rpm", iter_physical_tool_info().heatbreak_fan_rpm) JSON_COMMA;
-                                JSON_FIELD_INT("print_fan_rpm", iter_physical_tool_info().print_fan_rpm) // No comma
+                                JSON_FIELD_INT("heatbreak_fan_pwm", iter_physical_tool_info().heatbreak_fan_pwm) JSON_COMMA;
+                                JSON_FIELD_INT("print_fan_rpm", iter_physical_tool_info().print_fan_rpm) JSON_COMMA;
+                                JSON_FIELD_INT("print_fan_pwm", iter_physical_tool_info().print_fan_pwm) // No comma
                                 // The feeder mirrors the one in INFO. A head with a feeder leaves consumed_weight to its slots.
 #if HAS_MMU2()
                                 if (state.tool_args.mmu_enabled) {

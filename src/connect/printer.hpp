@@ -68,6 +68,9 @@ public:
 
         uint16_t print_fan_rpm = 0;
         uint16_t heatbreak_fan_rpm = 0;
+        /// Current PWM of the fans, in percent
+        uint8_t print_fan_pwm = 0;
+        uint8_t heatbreak_fan_pwm = 0;
 
         bool high_flow : 1 = false;
         bool hardened : 1 = false;
@@ -118,11 +121,15 @@ public:
         uint16_t fan_2_rpm = 0;
         static constexpr int8_t fan_pwm_target_unset = -1; // -1 means auto control, 0-100 is pwm percentage for manual control
         int8_t fan_pwm_target = fan_pwm_target_unset;
+        /// Current PWM of the cooling fans (shared by both), in percent; unlike fan_pwm_target, it includes automatic control
+        uint8_t fan_pwm = 0;
         /// Whether the official filtration fan is used; filtration_fan_* are meaningful only then.
         bool has_filtration_fan = false;
         uint16_t filtration_fan_rpm = 0;
         /// Same encoding as fan_pwm_target
         int8_t filtration_fan_pwm_target = fan_pwm_target_unset;
+        /// Same as fan_pwm
+        uint8_t filtration_fan_pwm = 0;
         int8_t led_intensity = 0;
     };
 #endif

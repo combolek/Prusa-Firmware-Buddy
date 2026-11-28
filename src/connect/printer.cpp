@@ -45,7 +45,7 @@ namespace connect_client {
 
 // The fingerprints pick the members one by one - a new member needs a decision there
 static_assert(aggregate_arity<ToConnectToolArgs>() == HAS_MMU2());
-static_assert(aggregate_arity<Printer::PhysicalToolInfo>() == 7 + 3 * PRINTER_IS_PRUSA_iX());
+static_assert(aggregate_arity<Printer::PhysicalToolInfo>() == 9 + 3 * PRINTER_IS_PRUSA_iX());
 static_assert(aggregate_arity<Printer::VirtualToolInfo>() == 2 * HAS_FILAMENT_TRACKER() + 3 * HAS_ANFC());
 
 // A new filament parameter needs a decision whether INFO reports it
@@ -127,7 +127,10 @@ uint32_t Printer::Params::telemetry_fingerprint(bool include_xy_axes) const {
                 // that to trigger the send too often, only when it actually really
                 // changes.
                 .add(physical_tool.print_fan_rpm / 500)
-                .add(physical_tool.heatbreak_fan_rpm / 500);
+                .add(physical_tool.heatbreak_fan_rpm / 500)
+                // Automatic control moves the PWM in small steps
+                .add(physical_tool.print_fan_pwm / 10)
+                .add(physical_tool.heatbreak_fan_pwm / 10);
         }
     }
 
@@ -176,9 +179,11 @@ uint32_t Printer::Params::telemetry_fingerprint(bool include_xy_axes) const {
         .add(int(chamber_info.fan_2_rpm / 500))
         .add(chamber_info.target_temp)
         .add(chamber_info.fan_pwm_target)
+        .add(chamber_info.fan_pwm / 10)
         .add(chamber_info.has_filtration_fan)
         .add(int(chamber_info.filtration_fan_rpm / 500))
         .add(chamber_info.filtration_fan_pwm_target)
+        .add(chamber_info.filtration_fan_pwm / 10)
         .add(chamber_info.led_intensity)
 #endif
         .done();

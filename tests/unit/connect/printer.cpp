@@ -28,6 +28,10 @@ TEST_CASE("connect::Params CRC", "[connect]") {
         params.chamber_info.fan_pwm_target = 50;
     }
 
+    SECTION("chamber fan_pwm") {
+        params.chamber_info.fan_pwm = 50;
+    }
+
     SECTION("chamber filtration fan presence") {
         params.chamber_info.has_filtration_fan = true;
     }
@@ -40,8 +44,29 @@ TEST_CASE("connect::Params CRC", "[connect]") {
         params.chamber_info.filtration_fan_pwm_target = 50;
     }
 
+    SECTION("chamber filtration_fan_pwm") {
+        params.chamber_info.filtration_fan_pwm = 50;
+    }
+
     SECTION("chamber led_intensity") {
         params.chamber_info.led_intensity = 100;
+    }
+
+    REQUIRE(base_crc != params.telemetry_fingerprint(true));
+}
+
+TEST_CASE("connect::Params CRC - tool fans", "[connect]") {
+    Printer::Params params(nullopt);
+    params.physical_tool_mask = 1;
+    auto &tool = params.physical_tools[PhysicalToolIndex::from_raw(0)];
+    uint32_t base_crc = params.telemetry_fingerprint(true);
+
+    SECTION("print_fan_pwm") {
+        tool.print_fan_pwm = 50;
+    }
+
+    SECTION("heatbreak_fan_pwm") {
+        tool.heatbreak_fan_pwm = 50;
     }
 
     REQUIRE(base_crc != params.telemetry_fingerprint(true));

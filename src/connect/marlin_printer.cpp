@@ -17,6 +17,7 @@
 #include <netdev.h>
 #include <print_utils.hpp>
 #include <common/marlin_vars.hpp>
+#include <common/pwm_utils.hpp>
 #include <wui_api.h>
 #include <wui.h>
 #include <feature/filament_sensor/filament_sensors_handler.hpp>
@@ -289,6 +290,8 @@ namespace {
 #endif
             physical_tool.print_fan_rpm = hotend.print_fan_rpm;
             physical_tool.heatbreak_fan_rpm = hotend.heatbreak_fan_rpm;
+            physical_tool.print_fan_pwm = PWM255 { hotend.print_fan_pwm }.to_percent();
+            physical_tool.heatbreak_fan_pwm = PWM255 { hotend.heatbreak_fan_pwm }.to_percent();
             physical_tool.nozzle_diameter = config_store().get_nozzle_diameter(pt);
             physical_tool.hardened = config_store().get_nozzle_is_hardened(pt);
             physical_tool.high_flow = config_store().get_nozzle_is_high_flow(pt.to_raw());
@@ -370,9 +373,11 @@ Printer::Params MarlinPrinter::params() const {
             .fan_1_rpm = xbe.fan1rpm,
             .fan_2_rpm = xbe.fan2rpm,
             .fan_pwm_target = pwm_to_percent(xbe.fan1_fan2_target_pwm),
+            .fan_pwm = static_cast<uint8_t>(xbe.fan1_fan2_actual_pwm.to_percent()),
             .has_filtration_fan = xbe_instance.using_filtration_fan_instead_of_cooling_fans(),
             .filtration_fan_rpm = xbe.filtration_fan_rpm,
             .filtration_fan_pwm_target = pwm_to_percent(xbe.filtration_fan_target_pwm),
+            .filtration_fan_pwm = static_cast<uint8_t>(xbe.filtration_fan_actual_pwm.to_percent()),
             .led_intensity = static_cast<int8_t>(static_cast<uint16_t>(leds::SideStripHandler::instance().get_max_brightness()) * 100 / 255),
         };
         params.addon_power = xbe_instance.usb_power();

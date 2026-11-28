@@ -82,8 +82,10 @@ public: // Fans
     struct FanState {
         uint16_t fan1rpm, fan2rpm;
         FanPWMOrAuto fan1_fan2_target_pwm;
+        FanPWM fan1_fan2_actual_pwm;
         uint16_t filtration_fan_rpm;
         FanPWMOrAuto filtration_fan_target_pwm;
+        FanPWM filtration_fan_actual_pwm;
     };
 
     FanState get_fan_state() const;

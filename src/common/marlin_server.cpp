@@ -3586,7 +3586,9 @@ static void _server_update_vars() {
         extruder.target_heatbreak = hotend.heatbreak_target_temp();
 #endif
         extruder.print_fan_rpm = Fans::print(tool).get_actual_rpm();
+        extruder.print_fan_pwm = Fans::print(tool).get_pwm();
         extruder.heatbreak_fan_rpm = Fans::heat_break(tool).get_actual_rpm();
+        extruder.heatbreak_fan_pwm = Fans::heat_break(tool).get_pwm();
     }
 
 #if HAS_INDX()
@@ -3595,7 +3597,9 @@ static void _server_update_vars() {
     // solution is needed.
     auto &no_tool_hotend = marlin_vars().hotend(NoTool());
     no_tool_hotend.print_fan_rpm = Fans::print(PhysicalToolIndex::from_raw(0)).get_actual_rpm();
+    no_tool_hotend.print_fan_pwm = Fans::print(PhysicalToolIndex::from_raw(0)).get_pwm();
     no_tool_hotend.heatbreak_fan_rpm = Fans::heat_break(PhysicalToolIndex::from_raw(0)).get_actual_rpm();
+    no_tool_hotend.heatbreak_fan_pwm = Fans::heat_break(PhysicalToolIndex::from_raw(0)).get_pwm();
 #endif
 
     for (auto tool : VirtualToolIndex::all()) {

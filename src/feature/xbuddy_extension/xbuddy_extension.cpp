@@ -252,8 +252,10 @@ XBuddyExtension::FanState XBuddyExtension::get_fan_state() const {
         .fan1rpm = fanrpms[std::to_underlying(Fan::cooling_fan_1)],
         .fan2rpm = fanrpms[std::to_underlying(Fan::cooling_fan_2)],
         .fan1_fan2_target_pwm = cooling_fans_target_pwm_,
+        .fan1_fan2_actual_pwm = cooling_fans_actual_pwm_,
         .filtration_fan_rpm = fanrpms[std::to_underlying(Fan::filtration_fan)],
         .filtration_fan_target_pwm = filtration_fan_target_pwm_,
+        .filtration_fan_actual_pwm = filtration_fan_actual_pwm_,
     };
 }
 

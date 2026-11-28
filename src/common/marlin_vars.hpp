@@ -391,9 +391,11 @@ public:
         MarlinVariable<float> target_heatbreak; // heatbreak target temperature [C]
 #endif
         MarlinVariable<uint16_t> heatbreak_fan_rpm; // Fans::heat_break(active_extruder).getActualRPM() [1/min]
+        MarlinVariable<uint8_t> heatbreak_fan_pwm; ///< PWM the fan controller drives the heatbreak fan at [0..255]
 
         // others
         MarlinVariable<uint16_t> print_fan_rpm; // Fans::print(active_extruder).getActualRPM() [1/min]
+        MarlinVariable<uint8_t> print_fan_pwm; ///< PWM the fan controller drives the print fan at [0..255]
 
         HotendVars() {}
         // disable copy constructor
